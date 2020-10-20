@@ -1,0 +1,23 @@
+version: '3.5'
+
+services:
+
+  kkt-web-server:
+    image: ubuntu
+    hostname: kkt-web-server
+    container_name: kkt-web-server
+    working_dir: /data
+#    restart: always
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - ./deb:/deb:ro
+      - ./log:/var/log/AtolFptrWebServer
+    ports:
+      - 16732:16732
+    command: /deb/endpoint.sh
+#    command: bash -c "apt-get install -y --no-install-recommends /deb/libfptr10_10.8.0.0_amd64-mod.deb /deb/fptr10-web-server_10.8.0.0_amd64.deb
+#          && tail -f /dev/null"
+#          && /usr/bin/atol-fptr-web-server"
+#    tty: true
+#    stdin_open: true

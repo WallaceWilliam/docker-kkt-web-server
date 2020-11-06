@@ -2,19 +2,37 @@ version: '3.5'
 
 services:
 
+  nginx:
+    image: nginx
+    hostname: nginx-kkt
+    container_name: nginx-kkt
+    working_dir: /data
+    restart: unless-stopped
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - ./data:/data:ro
+      - ./log/nginx:/var/log/nginx
+      - ./data/nginx/reverse-proxy.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - 16732:80
+
   kkt-web-server:
     image: ubuntu
     hostname: kkt-web-server
     container_name: kkt-web-server
     working_dir: /data
-#    restart: always
+    restart: unless-stopped
+#always
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
       - ./deb:/deb:ro
-      - ./log:/var/log/AtolFptrWebServer
-    ports:
-      - 16732:16732
+      - ./data/AtolFptrWebServer:/var/lib/AtolFptrWebServer
+      - ./log/kkt:/var/log/AtolFptrWebServer
+#    ports:
+#      - 16732:16732
+#    entrypoint: /deb/endpoint.sh
     command: /deb/endpoint.sh
 #    command: bash -c "apt-get install -y --no-install-recommends /deb/libfptr10_10.8.0.0_amd64-mod.deb /deb/fptr10-web-server_10.8.0.0_amd64.deb
 #          && tail -f /dev/null"
